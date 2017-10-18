@@ -37,14 +37,17 @@ setup(
         'requests',
         'watchdog',
         'numpy',
-        'scipy',
-        'pandas',
-        'scikit-learn',
-        'spark',
-        'pyarrow'
     ],
     extras_require={
-        'all':  ['yara-python', 'tldextract']
+        'all':  [
+            'yara-python',
+            'tldextract',
+            'scipy',
+            'pandas',
+            'scikit-learn',
+            'spark',
+            'pyarrow',
+        ],
     },
     license='Apache',
     keywords='Bro, Python, Networking, Security, Scikit-Learn, Spark, Kafka, Parquet',
