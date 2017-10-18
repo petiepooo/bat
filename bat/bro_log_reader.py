@@ -28,7 +28,7 @@ class BroLogReader(file_tailer.FileTailer):
                 strict (bool): Raise an exception on conversions errors (default=False)
     """
 
-    def __init__(self, filepath, delimiter='\t', tail=False, strict=False):
+    def __init__(self, filepath, delimiter='\t', tail=False, strict=False, open_func=open):
         """Initialization for the BroLogReader Class"""
 
         # First check if the file exists and is readable
@@ -40,6 +40,7 @@ class BroLogReader(file_tailer.FileTailer):
         self._delimiter = delimiter
         self._tail = tail
         self._strict = strict
+        self._open_func = open_func
 
         # Setup the Bro to Python Type mapper
         self.field_names = []
@@ -60,7 +61,7 @@ class BroLogReader(file_tailer.FileTailer):
                             'string': '-', 'unknown:': '-'}
 
         # Initialize the Parent Class
-        super(BroLogReader, self).__init__(self._filepath, full_read=True, tail=self._tail)
+        super(BroLogReader, self).__init__(self._filepath, full_read=True, tail=self._tail, open_func=self._open_func)
 
     def readrows(self):
         """The readrows method reads in the header of the Bro log and
@@ -126,7 +127,7 @@ class BroLogReader(file_tailer.FileTailer):
         """
 
         # Open the Bro logfile
-        with open(bro_log, 'r') as bro_file:
+        with self._open_func(bro_log, 'r') as bro_file:
 
             # Skip until you find the #fields line
             _line = bro_file.readline()

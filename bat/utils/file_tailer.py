@@ -17,17 +17,18 @@ class FileTailer(object):
             full_read (bool): Read the full file  (default=True)
             tail (bool): Do a dynamic tail on the file (i.e. tail -f) (default=True)
     """
-    def __init__(self, filepath, sleep=50, full_read=True, tail=True):
+    def __init__(self, filepath, sleep=50, full_read=True, tail=True, open_func=open):
         """FileTailer Initialization"""
         self._filepath = filepath
         self._sleep = sleep * 1e-3
         self._full_read = full_read
         self._tail = tail
+        self._open_func = open_func
 
     def readlines(self, offset=0):
         """Open the file for reading and yield lines as they are added"""
         try:
-            with open(self._filepath) as fp:
+            with self._open_func(self._filepath, 'rb') as fp:
                 # For full read go through existing lines in file
                 if self._full_read:
                     fp.seek(offset)
